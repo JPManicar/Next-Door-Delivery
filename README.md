@@ -6,14 +6,14 @@ this is made using Django REST Framework for the database connection as well as 
 
 ## Python Installation
 get the latest version of python (e.g. 3.9.0) to get the latest dependencies in Django working for you. then after use the command (do make sure your env variables are all set up)
-env variables needed:
- pip = `C:\Users\<user>\AppData\Local\Programs\Python\Python39\Scripts\` (sample only)
-python = `C:\Users\<user>\AppData\Local\Programs\Python\Python39\` (samply only)
-
+env variables needed: <br />
+ pip = `C:\Users\<user>\AppData\Local\Programs\Python\Python39\Scripts\` (sample only)<br />
+python = `C:\Users\<user>\AppData\Local\Programs\Python\Python39\` (samply only)<br />
+<br />
 be sure that you've clicked the option for setting up env variables before you install python.
-
-installation of third party dependencies: 
-command: ` pip install -r requirements.txt `
-alternative: `python -m pip install -r requirements.txt`
-another alternative: `python3 -m pip install -r requirements.txt`
+<br />
+installation of third party dependencies: <br />
+command: ` pip install -r requirements.txt `<br />
+alternative: `python -m pip install -r requirements.txt`<br />
+another alternative: `python3 -m pip install -r requirements.txt`<br />
 ## React-Native Installation
