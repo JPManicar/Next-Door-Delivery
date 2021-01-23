@@ -21,23 +21,23 @@ alternative: `python -m pip install -r requirements.txt`<br />
 another alternative: `python3 -m pip install -r requirements.txt`<br />
 
 ### React-Native Installation
-Follow the guide here:
-https://reactnativecode.com/installing-react-native-windows-tutorial/#:~:text=The%20first%20step%20to%20install%20React%20Native%20is,windows%20installer%20package%20from%20Python.org%20.%20Step%202.
+Follow the guide here:<br />
+https://reactnativecode.com/installing-react-native-windows-tutorial/#:~:text=The%20first%20step%20to%20install%20React%20Native%20is,windows%20installer%20package%20from%20Python.org%20.%20Step%202. <br/>
 P.S. -> Do not do react-native init <ProjectName> I have already set it up and will upload it later after the sample model I will do for users. Be patient.<br />
 For testing purposes, run react-native **only**
   
 ### React-Native Dependencies
-Components used in the app:
-- react-native-slider for Slider
-- react-navigation for Screens navigation
-- react-native-vector-icons
-- expo
-
-Custom components:
-- Block a flavoured View with predefined styles
-- Card a Block with predefined style
-- Badge, Button, Divider
-- Switch & Slider
-- Text a flavoured react-native Text with predefined styles
+Components used in the app:<br/>
+- react-native-slider for Slider<br/>
+- react-navigation for Screens navigation<br/>
+- react-native-vector-icons<br/>
+- expo<br/>
+<br/>
+Custom components:<br/>
+- Block a flavoured View with predefined styles<br/>
+- Card a Block with predefined style<br/>
+- Badge, Button, Divider<br/>
+- Switch & Slider<br/>
+- Text a flavoured react-native Text with predefined styles<br/>
 - theme.js for easy color & size customisation
 
