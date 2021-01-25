@@ -10,4 +10,6 @@ class StoreSerializer(serializers.ModelSerializer):
         	      'Name', 
         	      'longitude', 
         	      'latitude', 
-        	      'details')
+        	      'details',
+        	      'address',
+        	      'opening_hours',)

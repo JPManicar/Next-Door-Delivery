@@ -6,13 +6,15 @@ import geocoder
 from django.db import models
 
 
+
 class Users(models.Model):
     location = geocoder.ip('me')
+
     UserNo = models.CharField(max_length=15)
     FirstName = models.CharField(max_length=15)
     LastName = models.CharField(max_length=15)
     preferred_name = models.CharField(max_length=128)
-    address = models.TextField(max_length=2000)
+    address = models.TextField(max_length=2000, default="")
     City = models.CharField(max_length=15)
     Province = models.CharField(max_length=15)
     Country = models.CharField(max_length=15)
@@ -21,15 +23,22 @@ class Users(models.Model):
     active_buyer = models.BooleanField(max_length=15)
     Username = models.EmailField(max_length=30)
     Password = models.CharField(max_length=30)
+    longitude = models.FloatField(default=location.latlng[0])
+    latitude = models.FloatField(default=location.latlng[1])
+
 
     @property
     def created_time(self):
         return datetime.now()
 
-    @property
-    def longitude(self):
+    def get_longitude(self):
         return self.location.latlng[0]
 
-    @property
-    def latitude(self):
+    def get_latitude(self):
         return self.location.latlng[1]
+
+    def save(self,*args, **kwargs):
+        self.longitude = self.get_longitude()
+        self.latitude = self.get_latitude()
+
+        super(Store, self).save(*args, **kwargs)

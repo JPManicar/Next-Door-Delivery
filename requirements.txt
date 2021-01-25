@@ -3,3 +3,4 @@ psycopg2-binary>=2.8
 geocoder>=1.38.1
 djangorestframework>= 1.20.0
 pygments==2.5.2
+PyMySQL>=1.0.2
