@@ -13,7 +13,7 @@ class Product(models.Model):
             through='associates.StoreProduct',
             )
     title = models.CharField(max_length=45)
-    product_description = models.TextField(max_length=2000)
+    product_description = models.TextField(max_length=2000, default="")
     PROD_TYPE_CHOICES = (
         ('raw','raw'),
         ('vegetable','vegetable'),

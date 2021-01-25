@@ -8,11 +8,16 @@ from userForm.models import Users
 
 class Rider(models.Model):
     location = geocoder.ip('me')
+    user = models.ManyToManyField(
+            Users, 
+            through='associates.UserRider', 
+            )
+
     RiderNo = models.CharField(max_length=15)
     FirstName = models.CharField(max_length=15)
     LastName = models.CharField(max_length=15)
     preferred_name = models.CharField(max_length=30)
-    address = models.TextField(max_length=2000)
+    address = models.TextField(max_length=2000, default="")
     City = models.CharField(max_length=15)
     Province = models.CharField(max_length=15)
     Country = models.CharField(max_length=15)
@@ -21,6 +26,8 @@ class Rider(models.Model):
     active_rider = models.BooleanField(default=True)
     Username = models.EmailField(max_length=30)
     Password = models.CharField(max_length=30)
+    longitude = models.FloatField(default=location.latlng[0])
+    latitude = models.FloatField(default=location.latlng[1])
 
     def ___str__(self):
         return self.preferred_name
@@ -29,13 +36,18 @@ class Rider(models.Model):
     def created_time(self):
         return datetime.now()
 
-    @property
-    def longitude(self):
+    def get_longitude(self):
         return self.location.latlng[0]
 
-    @property
-    def latitude(self):
+    def get_latitude(self):
         return self.location.latlng[1]
+
+    def save(self,*args, **kwargs):
+        self.longitude = self.get_longitude()
+        self.latitude = self.get_latitude()
+
+        super(Store, self).save(*args, **kwargs)
+
 
 class RiderVehicle(models.Model):
     RiderAccount = models.ForeignKey(Rider, on_delete=models.CASCADE)
