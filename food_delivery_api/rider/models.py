@@ -7,7 +7,7 @@ from django.db import models
 from userForm.models import Users
 
 class Rider(models.Model):
-    location = geocoder.ip('me')
+    location = geocoder.ip('me') if geocoder.ip('me') is not None else [14.6193, 121.0537]
     user = models.ManyToManyField(
             Users, 
             through='associates.UserRider', 
@@ -42,11 +42,6 @@ class Rider(models.Model):
     def get_latitude(self):
         return self.location.latlng[1]
 
-    def save(self,*args, **kwargs):
-        self.longitude = self.get_longitude()
-        self.latitude = self.get_latitude()
-
-        super(Store, self).save(*args, **kwargs)
 
 
 class RiderVehicle(models.Model):

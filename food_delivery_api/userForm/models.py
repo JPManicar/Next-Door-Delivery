@@ -8,7 +8,7 @@ from django.db import models
 
 
 class Users(models.Model):
-    location = geocoder.ip('me')
+    location = geocoder.ip('me') if geocoder.ip('me') is not None else [14.6193, 121.0537]
 
     UserNo = models.CharField(max_length=15)
     FirstName = models.CharField(max_length=15)
@@ -36,9 +36,3 @@ class Users(models.Model):
 
     def get_latitude(self):
         return self.location.latlng[1]
-
-    def save(self,*args, **kwargs):
-        self.longitude = self.get_longitude()
-        self.latitude = self.get_latitude()
-
-        super(Store, self).save(*args, **kwargs)

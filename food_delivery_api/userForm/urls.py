@@ -6,8 +6,8 @@ from .views import (
 	UsersDetailView) 
 
 urlpatterns = [
-    path('rider/create', UsersListCreateView.as_view()),
-    path('rider/<int:pk>/details', UsersDetailView.as_view())
+    path('user/create', UsersListCreateView.as_view()),
+    path('user/<int:pk>/details', UsersDetailView.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

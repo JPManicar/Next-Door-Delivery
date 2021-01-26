@@ -6,7 +6,7 @@ import geocoder
 from django.db import models
 
 class Store(models.Model):
-    location = geocoder.ip('me')
+    location = geocoder.ip('me') if geocoder.ip('me') is not None else [14.6193, 121.0537]
 
     StoreNo = models.CharField(max_length=15)
     Name = models.CharField(max_length=30)
