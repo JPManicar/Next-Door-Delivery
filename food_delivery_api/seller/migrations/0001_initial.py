@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('active_seller', models.BooleanField(max_length=15)),
                 ('Username', models.EmailField(blank=True, max_length=30, null=True, unique=True)),
                 ('Password', models.CharField(max_length=30)),
-                ('storeNo', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='store.store')),
+                ('storeNo', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='store.store', null=True, blank=True)),
             ],
         ),
     ]

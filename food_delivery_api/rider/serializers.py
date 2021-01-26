@@ -18,9 +18,7 @@ class RiderSerializer(serializers.ModelSerializer):
         		 'Country',
         		 'ContactNo',
         		 'SecondaryContactNo',
-        		 'PlateNo',
         		 'active_rider',
-        		 'RiderVehicle',
         		 'Username',
         		 'Password',)
 

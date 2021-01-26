@@ -8,7 +8,7 @@ from django.db import models
 from store.models import Store
 
 class Seller(models.Model):
-    location = geocoder.ip('me')
+    location = geocoder.ip('me') if geocoder.ip('me') is not None else [14.6193, 121.0537]
     SellerNo = models.CharField(max_length=15)
     FirstName = models.CharField(max_length=15)
     LastName = models.CharField(max_length=15)
@@ -20,7 +20,7 @@ class Seller(models.Model):
     ContactNo = models.CharField(max_length=15)
     SecondaryContactNo = models.CharField(max_length=15)
     active_seller = models.BooleanField(max_length=15)
-    storeNo = models.ForeignKey(Store,  on_delete=models.CASCADE)
+    storeNo = models.ForeignKey(Store,  on_delete=models.CASCADE, null=True, blank=True)
     Username = models.EmailField(max_length=30, unique=True, null=True, blank=True)
     Password = models.CharField(max_length=30)
     longitude = models.FloatField(default=location.latlng[0])
@@ -38,9 +38,3 @@ class Seller(models.Model):
 
     def get_latitude(self):
         return self.location.latlng[1]
-
-    def save(self,*args, **kwargs):
-        self.longitude = self.get_longitude()
-        self.latitude = self.get_latitude()
-
-        super(Store, self).save(*args, **kwargs)
