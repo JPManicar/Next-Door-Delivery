@@ -1,50 +1,80 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
 
-from serializers import *
+from .models import *
+from .serializers import *
 from product.models import Product
 from rider.models import Rider
 from seller.models import Seller
 from store.models import Store
 from userForm.models import Users
 
-from __future__ import unicode_literals
 
 from django.shortcuts import render
 
-class StoreProductAPIView(generics.ListCreateAPIView):
+class StoreProductAPIView(generics.CreateAPIView):
+    model = StoreProduct
     serializer_class = StoreProductSerializer
+   
+class StoreProductListAPIView(generics.ListAPIView):
+    serializer_class = StoreProductListSerialiser
 
     def get_queryset(self):
-        return Product.objects.filter(storeproduct__store=self.request.data.get("store"))
+        pk = self.kwargs.get('pk')
+        queryset = Product.objects.filter(storeproduct__store=pk)
 
-class StoreSellerAPIView(generics.ListCreateAPIView):
+        return queryset.distinct()
+
+class StoreSellerAPIView(generics.CreateAPIView):
+    model = StoreSeller
     serializer_class = StoreSellerSerializer
 
-    def get_queryset(self):
-        return Store.objects.filter(storeseller__seller=request.data.get("seller"))
+class StoreSellerListAPIView(generics.ListAPIView):
+    serializer_class = StoreSellerListSerializer
 
-class UserProductAPIView(generics.ListCreateAPIView):
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        queryset = Store.objects.filter(storeseller__seller=pk)
+
+        return queryset.distinct()
+
+class UserProductAPIView(generics.CreateAPIView):
+    model = UserProduct
     serializer_class = UserProductSerializer
 
+class UserProductListAPIView(generics.ListAPIView):
+    serializer_class = UserProductListSerializer
+
     def get_queryset(self):
-        return Product.objects.filter(userproduct__user=request.data.get("user"))
+        query_set = Product.objects.all()
+        user = self.kwargs.get('pk')
+        prod_type = self.request.query_params.get('prod_type', None)
+        if user and prod_type is not None:
+            return Product.objects.filter(userproduct__user=user, 
+                userproduct__prod_state=prod_type)
+        return query_set
 
+   
 
-class UserRiderAPIView(generics.ListCreateAPIView):
+class UserRiderAPIView(generics.CreateAPIView):
     serializer_class = UserRiderSerializer
 
     def get_queryset(self):
         return Users.objects.filter(userrider__rider=request.data.get("rider"))
 
 
-class StoreSellerAPIView(generics.ListCreateAPIView):
-    serializer_class = StoreSellerSerializer
+class UserRiderListAPIView(generics.ListAPIView):
+    serializer_class = RiderListSerializer
 
     def get_queryset(self):
-        return Store.objects.filter(storeseller__seller=request.data.get("seller"))
+        pk = self.kwargs.get('pk')
+        queryset = Rider.objects.filter(userrider__user=pk)
+
+        return queryset.distinct()
 
 

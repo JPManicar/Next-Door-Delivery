@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userproduct',
             name='prod_state',
-            field=models.CharField(choices=[('removed', 'removed'), ('cart', 'cart'), ('checkout', 'checkout'), ('received', 'received'), ('failed', 'failed')], default='removed', max_length=15),
+            field=models.CharField(choices=[('removed', 'removed'), ('cart', 'cart'), ('checkout', 'checkout'),('payment', 'payment'), ('received', 'received'), ('failed', 'failed')], default='removed', max_length=15),
         ),
         migrations.AddField(
             model_name='userrider',

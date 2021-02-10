@@ -5,5 +5,5 @@ from .views import (
 
 urlpatterns = [
     path('seller/create', SellerListCreateView.as_view()),
-    path('seller/<int:pk>/details', SellerDetailView.as_view())
+    path('seller/<str:username>/details', SellerDetailView.as_view())
 ]
