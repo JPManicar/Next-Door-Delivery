@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from datetime import datetime
 
 from store.models import Store
+from userForm.models import Users
 
 from django.db import models
 
@@ -11,6 +12,10 @@ class Product(models.Model):
     store = models.ManyToManyField(
             Store, 
             through='associates.StoreProduct',
+            )
+    user = models.ManyToManyField(
+            Users, 
+            through='associates.UserProduct',
             )
     title = models.CharField(max_length=45)
     product_description = models.TextField(max_length=2000, default="")

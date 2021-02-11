@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext}  from 'react';
+import React, {useState, createRef}  from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -13,21 +13,13 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 
-import { UserContext, TypeContext } from '../UserContext';
-import ProductCard from './components/ProductCard';
+import { UserContext } from '../../UserContext';
 
-export default function Cart() {
+export default function Payment () {
   const {user,setUser} = useContext(UserContext);
-  const {types, setTypes} = useContext(TypeContext);
+  const nav = useNavigation();
 
   const [cartList, setCartList] = useState([]);
-  var nav = useNavigation();
-  var card = [];
-
-  useEffect(() => {
-    getProductsList();
-  }, []);
-
   if (cartList.length) {
       for (let i = 0; i < cartList.length; i++) {
       card.push(
@@ -36,8 +28,13 @@ export default function Cart() {
     }
   }
 
+  useEffect(() => {
+    getProductsList();
+  }, []);
+
   function getProductsList () {
-    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=cart", {
+    //TODO: ?prod_state= to payment
+    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=", {
       Accept: "application/json",
       "Content-Type": "application/json",
     })
@@ -50,20 +47,19 @@ export default function Cart() {
         console.error(error);
       });
   }
-  function checkoutProduct () {
-    //TODO: add some functionality to update status to checkout
+  function paymentProduct () {
+    //TODO: edit prod_state to rider
     var success = 0;
     for (let i = 0; i < cartList.length; i++) {
       const entity = {
         user: user.id,
         product: cartList[i].id,
-        prod_state: 'checkout'
+        prod_state: '<update this string to payment>'
       }
       axios.put("associate/user/"+ user.id +"/products/details", entity)
         .then((response) => {
           if (response.status == 200 || response.status == 201) {
               success = 1;
-              console.log(response);
           } else {
               success = 0
               console.log(response);
@@ -74,19 +70,22 @@ export default function Cart() {
       Alert.alert(
         "Success",
         "Products moved to checkout",
-        [{ text: "OK", onPress: () =>navigation.navigate('checkout') }],
+        [{ text: "OK", onPress: () =>navigation.navigate('payment') }],
       );
     }
   }
-
+  
+  function orderNow () {
+    nav.navigate('Order Details');
+  }
   return(
     <View style={styles.container}>
-      <Text style={styles.logo}>ITEMS IN CART</Text>
+      <Text style={styles.logo}>ITEMS IN CHECKOUT</Text>
       <ScrollView style={styles.scroll}>
         {card}
       </ScrollView>
       <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText} onPress={() => checkoutProduct()}>Checkout</Text>
+        <Text style={styles.loginText} onPress={() => orderNow()}>payment</Text>
       </TouchableOpacity>
     </View>
   );

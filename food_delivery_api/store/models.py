@@ -17,7 +17,7 @@ class Store(models.Model):
     opening_hours = models.CharField(max_length=30, default="")
 
     def ___str__(self):
-        return self.preferred_name
+        return self.Name
 
     def get_longitude(self):
         return self.location.latlng[0]

@@ -26,10 +26,16 @@ class BaseCoreModel(models.Model):
 class StoreProduct(BaseCoreModel):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.store.Name
 	
 class StoreSeller(BaseCoreModel):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.seller.preferred_name
 
 class UserProduct(BaseCoreModel):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -39,6 +45,7 @@ class UserProduct(BaseCoreModel):
         ('cart','cart'),
         ('checkout','checkout'),
         ('payment', 'payment'),
+        ('rider', 'rider'),
         ('received','received'),
         ('failed','failed'),
     )
@@ -48,6 +55,8 @@ class UserProduct(BaseCoreModel):
         default='removed',
     )
 	
+    def __str__(self):
+        return self.user.preferred_name
 
 class UserRider(BaseCoreModel):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -63,10 +72,14 @@ class UserRider(BaseCoreModel):
         choices=RID_STATE_CHOICES,
         default='toShop',
     )
+
+    def __str__(self):
+        return self.rider.preferred_name
 	
 
 class UserStore(BaseCoreModel):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     user = models.ForeignKey(Rider, on_delete=models.CASCADE)
 
-
+    def __str__(self):
+        return self.user.preferred_name

@@ -27,8 +27,8 @@ export default function Login () {
   const {store,setStore} = useContext(StoreContext);
 
   const url = {'User': "http://10.0.2.2:8000/api/user/"+ Username +"/details",
-               'Seller': "http://10.0.2.2:8000/api/rider/"+ Username +"/details",
-               'Rider': "http://10.0.2.2:8000/api/seller"+ Username +"/details"}
+               'Rider': "http://10.0.2.2:8000/api/rider/"+ Username +"/details",
+               'Seller': "http://10.0.2.2:8000/api/seller/"+ Username +"/details"}
   const storeURL = "http://10.0.2.2:8000/api/associate/seller/"+ user.id +"/store"
 
   function login (type) {

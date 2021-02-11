@@ -13,13 +13,64 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 
+import { UserContext } from '../../UserContext';
+
 export default function Checkout () {
+  const {user,setUser} = useContext(UserContext);
   const nav = useNavigation();
-  var card = [];
-  if (card.length) {
-      for (let i = 0; i < 5; i++) {
+
+  const [cartList, setCartList] = useState([]);
+  if (cartList.length) {
+      for (let i = 0; i < cartList.length; i++) {
       card.push(
-          <OrderCard />
+          <ProductCard prop={cartList[i]}/>
+      );
+    }
+  }
+
+  useEffect(() => {
+    getProductsList();
+  }, []);
+
+  function getProductsList () {
+    //TODO: ?prod_state= to checkout
+    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=", {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        setCartList(json);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+  function paymentProduct () {
+    //TODO: edit prod_state to payment
+    var success = 0;
+    for (let i = 0; i < cartList.length; i++) {
+      const entity = {
+        user: user.id,
+        product: cartList[i].id,
+        prod_state: '<update this string to payment>'
+      }
+      axios.put("associate/user/"+ user.id +"/products/details", entity)
+        .then((response) => {
+          if (response.status == 200 || response.status == 201) {
+              success = 1;
+          } else {
+              success = 0
+              console.log(response);
+          }
+        });
+    }
+    if (success) {
+      Alert.alert(
+        "Success",
+        "Products moved to checkout",
+        [{ text: "OK", onPress: () =>navigation.navigate('Payment') }],
       );
     }
   }
@@ -29,12 +80,12 @@ export default function Checkout () {
   }
   return(
     <View style={styles.container}>
-      <Text style={styles.logo}>ITEMS IN CART</Text>
+      <Text style={styles.logo}>ITEMS IN CHECKOUT</Text>
       <ScrollView style={styles.scroll}>
         {card}
       </ScrollView>
       <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText} onPress={() => orderNow()}>Place Order</Text>
+        <Text style={styles.loginText} onPress={() => orderNow()}>payment</Text>
       </TouchableOpacity>
     </View>
   );

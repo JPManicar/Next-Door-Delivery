@@ -51,14 +51,20 @@ class UserProductListAPIView(generics.ListAPIView):
     serializer_class = UserProductListSerializer
 
     def get_queryset(self):
-        query_set = Product.objects.all()
         user = self.kwargs.get('pk')
-        prod_type = self.request.query_params.get('prod_type', None)
-        if user and prod_type is not None:
+        prod_state = self.request.query_params.get('prod_state', None)
+        if user and prod_state is not None:
             return Product.objects.filter(userproduct__user=user, 
-                userproduct__prod_state=prod_type)
-        return query_set
+                userproduct__prod_state=prod_state)
+        
+        return Product.objects.filter(userproduct__user=user)
+        
 
+class UserProductUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UserProduct.objects.all()
+    lookup_url_kwarg = 'pk'
+    lookup_field = 'product'
+    serializer_class = UserProductSerializer
    
 
 class UserRiderAPIView(generics.CreateAPIView):

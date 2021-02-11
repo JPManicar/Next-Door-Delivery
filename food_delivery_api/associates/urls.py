@@ -8,6 +8,7 @@ from .views import (
 	StoreSellerListAPIView,
 	UserProductAPIView,
 	UserProductListAPIView,
+	UserProductUpdateAPIView,
 	UserRiderAPIView,
 	UserRiderListAPIView
 ) 
@@ -19,6 +20,7 @@ urlpatterns = [
     path(r'associate/seller/<int:pk>/store', StoreSellerListAPIView.as_view()),
     path('associate/user/products', UserProductAPIView.as_view()),
     path(r'associate/user/<int:pk>/products', UserProductListAPIView.as_view()),
+    path(r'associate/user/<int:pk>/products/details', UserProductUpdateAPIView.as_view()),
     path('associate/user/rider', UserRiderAPIView.as_view()),
      path(r'associate/rider/<int:pk>/user', UserRiderListAPIView.as_view()),
 ]

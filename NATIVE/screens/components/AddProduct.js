@@ -14,7 +14,7 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import {StoreContext} from '../../UserContext';
+import {StoreContext, ListProductContext} from '../../UserContext';
 
 export default function AddProduct() {
   const [title, setTitle] =  useState("");
@@ -25,6 +25,7 @@ export default function AddProduct() {
 
   const navigation = useNavigation();
   const {store,setStore} = useContext(StoreContext);
+  const {listProduct, setListProduct} = useContext(ListProductContext);
 
   function addProduct () {
     const entity = {
@@ -60,10 +61,11 @@ export default function AddProduct() {
         product: product.id,
         store: store.id
     }
-    console.log(product, store);
+   
     axios.post("http://10.0.2.2:8000/api/associate/store/products", relation)
       .then((response) => {
           console.log(response);
+          setListProduct(listProduct.concat(product));
           navigation.navigate('home', { screen: 'Dashboard'});
        });
   }
