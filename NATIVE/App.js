@@ -22,7 +22,7 @@ import Products from './screens/posts/Products';
 import ProductDetail from './screens/components/ProductDetail';
 import AddProduct from './screens/components/AddProduct';
 
-import {UserContext, TypeContext, StoreContext, ProductContext} from './UserContext';
+import {UserContext, TypeContext, StoreContext, ProductContext, ListProductContext, filterTypeContext} from './UserContext';
 
 const Tab = createBottomTabNavigator();
 
@@ -129,6 +129,8 @@ function App() {
   const [types, setTypes] = useState('');
   const [store, setStore] = useState({});
   const [product, setProduct] = useState({});
+  const [listProduct, setListProduct] = useState([]);
+  const [filterType, setFilterType] = useState('');
 
   return (
   <UserContext.Provider value={{user: user, 
@@ -143,6 +145,13 @@ function App() {
   <ProductContext.Provider value={{product: product, 
                         setProduct: ((value) => {setProduct(value)})
                          }}>
+  <ListProductContext.Provider value={{listProduct: listProduct, 
+                        setListProduct: ((value) => {setListProduct(value)})
+                         }}>
+  <filterTypeContext.Provider value={{filterType: filterType, 
+                        setFilterType: ((value) => {setFilterType(value)})
+                         }}>
+                         
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Welcome'>
         <Stack.Screen name='Welcome' component={Welcome} />
@@ -158,6 +167,8 @@ function App() {
         <Stack.Screen name='home' component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
+  </filterTypeContext.Provider>
+  </ListProductContext.Provider>
   </ProductContext.Provider>
   </StoreContext.Provider>
   </TypeContext.Provider>

@@ -72,7 +72,8 @@ class UserRiderSerializer(serializers.ModelSerializer):
      class Meta:
         model = UserRider
         fields = ('user',
-        		  'rider'
+        		  'rider',
+                  'rider_state',
         		  )
 
 class RiderListSerializer(serializers.ModelSerializer):

@@ -12,3 +12,10 @@ export const StoreContext = React.createContext({store: {},
 
 export const ProductContext = React.createContext({product: {},
                         setProduct: ((value) => {}) });
+
+export const ListProductContext = React.createContext({listProduct: {},
+                        setListProduct: ((value) => {}) });
+
+export const filterTypeContext = React.createContext({filterType: '',
+                        setFilterType: ((value) => {})
+                    });

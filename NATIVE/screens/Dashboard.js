@@ -11,20 +11,21 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, Icon } from 'react-native-elements';
 import axios from "axios";
 import Categories from './posts/Categories';
 import StoreDetail from './components/StoreDetail';
 import ProductCard from './components/ProductCard';
 
-import {UserContext, TypeContext, StoreContext, ProductContext} from '../UserContext';
+import {UserContext, TypeContext, StoreContext, ListProductContext, filterTypeContext} from '../UserContext';
 import ProductAdder from './components/ProductAdder';
 
 export default function Dashboard() { 
   const {user,setUser} = useContext(UserContext);
   const {types, setTypes} = useContext(TypeContext);
   const {store, setStore} = useContext(StoreContext);
-  const {prod, setProd} = useContext(ProductContext);
+  const {listProduct, setListProduct} = useContext(ListProductContext);
+  const {filterType, setFilterType} = useContext(filterTypeContext);
 
   const [search, setSearch] = useState("");
   const storeId = (types == 'Seller') ? store.id : 0;
@@ -46,6 +47,7 @@ export default function Dashboard() {
       .then((response) => response.json())
       .then((json) => {
         setProduct(json);
+        setListProduct(json);
       })
       .catch((error) => {
         console.error(error);
@@ -56,7 +58,10 @@ export default function Dashboard() {
     navigation.navigate('Product Details');
   }
 
-
+  function searchIt () {
+      setFilterType(search);
+      navigation.navigate('list product');
+  }
 
   var card = [];
   if (product.length) {
@@ -64,6 +69,7 @@ export default function Dashboard() {
       card.push(
           <ProductCard prop={product[i]} onPress={() => orderNow()} />
       );
+      console.log(product[i]);
     }
   }
 
@@ -73,9 +79,15 @@ export default function Dashboard() {
         <ScrollView style={styles.scroll}>
           <View>
             <SearchBar
+              style={styles.searchpane}
               placeholder="Type Here to Search..." 
+              value={search}
               onChangeText={text => setSearch(text)}
+              onKey = {(event) => searchIt(event)}
               />
+             <TouchableOpacity style={styles.loginBtn}> 
+                <Text style={styles.buttonText} onPress={() => searchIt() }>Search</Text>
+              </TouchableOpacity>
           </View>
 
           <View>
@@ -96,11 +108,16 @@ export default function Dashboard() {
       <View style={styles.container}>
         <ScrollView style={styles.scroll}>
           <View>
-            <TextInput  
-              style={styles.inputText}
-              placeholder="Search..." 
-              placeholderTextColor="#003f5c"
-              onChangeText={text => setSearch(text.target.value)}/>
+            <SearchBar
+              style={styles.searchpane}
+              placeholder="Type Here to Search..." 
+              value={search}
+              onChangeText={text => setSearch(text)}
+              onKey = {(event) => searchIt(event)}
+              />
+             <TouchableOpacity style={styles.loginBtn}> 
+                <Text style={styles.buttonText} onPress={() => searchIt() }>Search</Text>
+              </TouchableOpacity>
           </View>
 
           <View>
@@ -122,6 +139,15 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   scroll: {
     width:400,
+  },
+  searchTab: {
+    flexDirection:'row',
+    alignItems: 'center',
+    margin:0,
+    marginBottom: 10,
+  },
+  searchpane: {
+    width: 300
   },
   container: {
       flex: 1,
@@ -150,4 +176,18 @@ const styles = StyleSheet.create({
     marginBottom:10,
     padding: 10,
   },
+  loginBtn:{
+    width:400,
+    borderColor: "#909090",
+    backgroundColor:"#909090",
+    borderRadius:3,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:0,
+    fontWeight:"bold",
+  },
+  loginText:{
+    color:"white"
+  }
 });

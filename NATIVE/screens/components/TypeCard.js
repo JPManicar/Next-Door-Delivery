@@ -13,17 +13,15 @@ import {
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { ProductContext } from '../../UserContext';
+import { filterTypeContext } from '../../UserContext';
 
 
 export default function TypeCard({prop}) {
   const navigation = useNavigation();
-  const {product, setProduct} = useContext(ProductContext);
+  const {filterType, setFilterType} = useContext(filterTypeContext);
 
   function goToProducts () {
-    const arr = prop.prod.filter((item) => {item.product_type == prop.type.value})
-    console.log("START HERE: ", prop.prod, arr, prod.type.value);
-    setProduct(arr);
+    setFilterType(prop.type.value);
     navigation.navigate('list product');
   }
   return (

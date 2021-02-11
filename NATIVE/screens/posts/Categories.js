@@ -1,4 +1,4 @@
-import React, {useState, createRef}  from 'react';
+import React, {useState, createRef, useContext}  from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -16,12 +16,10 @@ import {prod_types} from '../constants/constant';
 import TypeCard from '../components/TypeCard';
 
 export default function  Categories ({prop}) {
-
-
   var card = [];
   for (let i = 0; i < 5; i++) {
     card.push(
-       <TypeCard prop={{type:prod_types[i], prod:prop}}/>
+       <TypeCard prop={{type:prod_types[i] }}/>
     );
   }
 

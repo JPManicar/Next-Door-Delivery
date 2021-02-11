@@ -22,12 +22,7 @@ export default function ProductDetail() {
   const {user, setUser} = useContext(UserContext);
   const {types, setTypes} = useContext(TypeContext);
 
-  const [title, setTitle] = useState(product.title);
-  const [product_description, setProductDescription] = useState(product.product_description);
-  const [quantity, setQuantity] = useState(product.quantity.toString());
-  const [price, setPrice] = useState(product.price.toString());
-
-  console.log(product);
+  console.log('PRODUCT',product);
 
   function cart () {
     const relation = {
@@ -55,33 +50,6 @@ export default function ProductDetail() {
               [{ text: "OK", onPress: () => console.log("OK Pressed") }],
             );
         }
-      });
-  }
-
-  function update () {
-    const entity = {
-      id: product.id,
-      title: title,
-      product_description: product_description,
-      product_type: product.product_type,
-      quantity: quantity,
-      price: price
-    };
-    axios.put("http://10.0.2.2:8000/api/product/"+ product.id +"/details", entity)
-      .then((response) => {
-          if (response.status == 200 || response.status == 201) {
-              Alert.alert(
-                "Success",
-                "Product Update. Redirecting you to dashboard.",
-                [{ text: "OK", onPress: () => navigation.navigate('home', {screen: 'Dashboard'}) }],
-              );
-          } else {
-              Alert.alert(
-                "Failed",
-                "Failed to add product. Please try again.",
-                [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-              );
-          }
       });
   }
 
@@ -121,6 +89,38 @@ export default function ProductDetail() {
       </ScrollView>    
     );
   } else {
+    const [title, setTitle] = useState(product.title);
+    const [product_description, setProductDescription] = useState(product.product_description);
+    const [quantity, setQuantity] = useState(product.quantity.toString());
+    const [price, setPrice] = useState(product.price.toString());
+
+    function update () {
+    const entity = {
+      id: product.id,
+      title: title,
+      product_description: product_description,
+      product_type: product.product_type,
+      quantity: quantity,
+      price: price
+    };
+    axios.put("http://10.0.2.2:8000/api/product/"+ product.id +"/details", entity)
+      .then((response) => {
+          if (response.status == 200 || response.status == 201) {
+              Alert.alert(
+                "Success",
+                "Product Update. Redirecting you to dashboard.",
+                [{ text: "OK", onPress: () => navigation.navigate('home', {screen: 'Dashboard'}) }],
+              );
+          } else {
+              Alert.alert(
+                "Failed",
+                "Failed to add product. Please try again.",
+                [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+              );
+          }
+      });
+  }
+
     return (
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>

@@ -21,6 +21,7 @@ export default function ProductCard({prop}) {
 
   function goToProductDetail () {
     setProduct(prop);
+    console.log('PROD CARD', product);
     navigation.navigate('Product Details');
   }
   return (

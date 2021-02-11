@@ -14,32 +14,44 @@ import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 
 import ProductCard from '../components/ProductCard';
-import { ProductContext } from '../../UserContext';
-
+import { ListProductContext, filterTypeContext } from '../../UserContext';
+import { SearchBar } from 'react-native-elements';
 
 export default function Products () {
   const [search, setSearch] = useState("");
-  const {product, setProduct} = useContext(ProductContext);
+  const {listProduct, setListProduct} = useContext(ListProductContext);
+  const {filterType, setFilterType} = useContext(filterTypeContext);
+  const filters = ['raw', 'vegetable', 'Packed Goods', 'Essentials', 'Cooked Goods'];
   const nav = useNavigation();
 
-  console.log(product);
+  console.log(listProduct);
   var card = [];
-  if (product.length) {
-      for (let i = 0; i < product.length; i++) {
+  if (listProduct.length && filters.includes(filterType)) {
+      console.log('filter', listProduct);
+      const arr = listProduct.filter((item) =>  item.product_type.includes(filterType) )
+      for (let i = 0; i < arr.length; i++) {
       card.push(
-          <ProductCard prop={product[i]} />
+          <ProductCard prop={arr[i]} />
       );
     }
+  } else if (listProduct.length) {
+    Keyboard.dismiss()
+    for (let i = 0; i < listProduct.length; i++) {
+      if (listProduct[i].title.includes(filterType)) {
+        card.push(
+          <ProductCard prop={listProduct[i]} />
+        );
+      }
+    }
   }
-  
+
   return(
     <View style={styles.container}>
       <View>
-          <TextInput  
-            style={styles.inputText}
-            placeholder="Search..." 
-            placeholderTextColor="#003f5c"
-            onChangeText={text => setSearch(text.target.value)}/>
+          <SearchBar
+              placeholder="Type Here to Search..." 
+              onChangeText={text => setFilterType(text)}
+              />
       </View>
       <Text style={styles.logo}>PRODUCTS</Text>
       <ScrollView style={styles.scroll}>
