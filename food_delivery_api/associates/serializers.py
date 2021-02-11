@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import *
 from product.models import Product  
 from store.models import Store
-from rider.models import Rider
+from rider.models import Rider, RiderVehicle
 from userForm.models import Users
 
 class StoreProductSerializer(serializers.ModelSerializer):
@@ -14,15 +14,15 @@ class StoreProductSerializer(serializers.ModelSerializer):
         		  'product',
                  )
 
-class StoreProductListSerialiser(erializers.ModelSerializer):
+class StoreProductListSerialiser(serializers.ModelSerializer):
 
     class Meta:
         model = Product
         fields = (
             'id',
-            'StoreNo', 
             'title', 
             'product_description', 
+            'product_type',
             'quantity', 
             'price',)
 
@@ -38,7 +38,7 @@ class StoreSellerListSerializer(serializers.ModelSerializer):
     
      class Meta:
         model = Store
-        fields = (
+        fields = ('id',
                   'Name', 
                   'longitude', 
                   'latitude', 
@@ -51,7 +51,8 @@ class UserProductSerializer(serializers.ModelSerializer):
      class Meta:
         model = UserProduct
         fields = ('user',
-        		  'product'
+        		  'product',
+                  'prod_state',
         		  )
 
 class UserProductListSerializer(serializers.ModelSerializer):
@@ -60,9 +61,9 @@ class UserProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             'id',
-            'StoreNo', 
             'title', 
             'product_description', 
+            'product_type',
             'quantity', 
             'price',)
 
@@ -71,15 +72,16 @@ class UserRiderSerializer(serializers.ModelSerializer):
      class Meta:
         model = UserRider
         fields = ('user',
-        		  'rider'
+        		  'rider',
+                  'rider_state',
         		  )
 
 class RiderListSerializer(serializers.ModelSerializer):
-    riderVehicle = serializers.methodField()
-
+    riderVehicle = serializers.SerializerMethodField()
     class Meta:
         model = Rider
-        fields = ('RiderNo',
+        fields = ('id',
+                 'RiderNo',
                  'FirstName',
                  'LastName',
                  'ContactNo',
@@ -89,9 +91,10 @@ class RiderListSerializer(serializers.ModelSerializer):
                  'longitude',
                  'latitude',)
 
-class UserListSerializer(serializers.ModelSerializer):
-    riderVehicle = serializers.methodField()
+    def get_riderVehicle(self, obj):
+        return RiderVehicle.objects.filter(RiderAccount=self.id)
 
+class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = (

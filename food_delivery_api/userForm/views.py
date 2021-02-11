@@ -16,5 +16,9 @@ class UsersListCreateView(generics.ListCreateAPIView):
     serializer_class = UsersSerializer
 
 class UsersDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Users.objects.all()
     serializer_class = UsersSerializer
+    lookup_url_kwarg = 'username'
+    lookup_field = 'Username'
+    queryset = Users.objects.all()
+
+   

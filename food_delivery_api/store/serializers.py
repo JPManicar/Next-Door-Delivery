@@ -6,10 +6,9 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ('StoreNo', 
+        fields = ( 'id',
+        		  'StoreNo', 
         	      'Name', 
-        	      'longitude', 
-        	      'latitude', 
         	      'details',
         	      'address',
         	      'opening_hours',)

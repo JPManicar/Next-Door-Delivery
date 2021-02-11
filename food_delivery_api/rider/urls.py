@@ -7,7 +7,7 @@ from .views import (
 
 urlpatterns = [
     path('rider/create', RiderListCreateView.as_view()),
-    path('rider/<int:pk>/details', RiderDetailView.as_view())
+    path('rider/<str:username>/details', RiderDetailView.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

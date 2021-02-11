@@ -6,7 +6,9 @@ class SellerSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Seller
-        fields = ('SellerNo',
+        fields = (
+                 'id',
+                 'SellerNo',
         		 'FirstName',
         		 'LastName',
         		 'preferred_name',

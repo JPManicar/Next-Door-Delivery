@@ -26,5 +26,5 @@ urlpatterns = [
      path('api/', include('seller.urls')),
      path('api/', include('store.urls')),
      path('api/', include('rider.urls')),
-     
+     path('api/', include('associates.urls'))
 ]

@@ -7,7 +7,7 @@ from .views import (
 
 urlpatterns = [
     path('user/create', UsersListCreateView.as_view()),
-    path('user/<int:pk>/details', UsersDetailView.as_view())
+    path('user/<str:username>/details', UsersDetailView.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

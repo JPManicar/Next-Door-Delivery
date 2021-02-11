@@ -18,4 +18,6 @@ class RiderListCreateView(generics.ListCreateAPIView):
 
 class RiderDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rider.objects.all()
+    lookup_url_kwarg = 'username'
+    lookup_field = 'Username'
     serializer_class = RiderSerializer

@@ -17,5 +17,7 @@ class SellerListCreateView(generics.ListCreateAPIView):
         serializer_class = SellerSerializer
 
 class SellerDetailView(generics.RetrieveUpdateDestroyAPIView):
-        queryset = Seller.objects.all()
-        serializer_class = SellerSerializer
+		queryset = Seller.objects.all()
+		lookup_url_kwarg = 'username'
+		lookup_field = 'Username'
+		serializer_class = SellerSerializer

@@ -38,6 +38,7 @@ class UserProduct(BaseCoreModel):
         ('removed', 'removed'),
         ('cart','cart'),
         ('checkout','checkout'),
+        ('payment', 'payment'),
         ('received','received'),
         ('failed','failed'),
     )
