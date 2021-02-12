@@ -36,7 +36,7 @@ class StoreSellerSerializer(serializers.ModelSerializer):
 
 class StoreSellerListSerializer(serializers.ModelSerializer):
     
-     class Meta:
+    class Meta:
         model = Store
         fields = ('id',
                   'Name', 
@@ -48,7 +48,7 @@ class StoreSellerListSerializer(serializers.ModelSerializer):
 
 class UserProductSerializer(serializers.ModelSerializer):
     
-     class Meta:
+    class Meta:
         model = UserProduct
         fields = ('user',
         		  'product',
@@ -57,7 +57,7 @@ class UserProductSerializer(serializers.ModelSerializer):
 
 class UserProductListSerializer(serializers.ModelSerializer):
     
-     class Meta:
+    class Meta:
         model = Product
         fields = (
             'id',
@@ -65,11 +65,13 @@ class UserProductListSerializer(serializers.ModelSerializer):
             'product_description', 
             'product_type',
             'quantity', 
-            'price',)
+            'price',
+            )
+
 
 class UserRiderSerializer(serializers.ModelSerializer):
     
-     class Meta:
+    class Meta:
         model = UserRider
         fields = ('user',
         		  'rider',
@@ -111,7 +113,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class UserStoreSerializer(serializers.ModelSerializer):
     
-     class Meta:
+    class Meta:
         model = UserStore
         fields = ('user',
         		  'store'

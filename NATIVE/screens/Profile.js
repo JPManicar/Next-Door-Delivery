@@ -131,7 +131,7 @@ export default function Profile() {
                     <Text style={styles.labelAdress}>Secondary Contact No: </Text>
                     <TextInput style={styles.inputAddressText}
                     onChangeText={(text) => setSecondaryContactNo(text)}
-                    value={ContactNo}
+                    value={SecondaryContactNo}
                     underlineColorAndroid='rgba(0,0,0,0)' 
                     placeholder="Enter Contact no.."
                     placeholderTextColor = "#002f6c"

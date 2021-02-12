@@ -30,6 +30,7 @@ class Migration(migrations.Migration):
                 ('quantity', models.IntegerField()),
                 ('price', models.FloatField()),
                 ('store', models.ManyToManyField(through='associates.StoreProduct', to='store.Store')),
+                ('user', models.ManyToManyField(through='associates.UserProduct', to='userForm.Users')),
             ],
         ),
     ]

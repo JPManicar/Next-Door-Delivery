@@ -31,6 +31,9 @@ class Users(models.Model):
     def created_time(self):
         return datetime.now()
 
+    def ___str__(self):
+        return self.preferred_name
+
     def get_longitude(self):
         return self.location.latlng[0]
 

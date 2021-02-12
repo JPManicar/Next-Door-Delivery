@@ -27,11 +27,7 @@ class Seller(models.Model):
     latitude = models.FloatField(default=location.latlng[1])
 	
     def ___str__(self):
-        return self.preferred_name 
-
-    @property
-    def created_time(self):
-        return datetime.now()
+        return self.preferred_name
     
     def get_longitude(self):
         return self.location.latlng[0]

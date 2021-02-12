@@ -14,6 +14,7 @@ import Profile from './screens/Profile';
 
 import Cart from './screens/Cart'; 
 import CheckOut from './screens/orders/Checkout';
+import Payment from './screens/orders/Payment';
 import OrderDetails from './screens/orders/OrderDetails';
 import Tracker from './screens/Tracker';
 import CreateStore from './screens/components/CreateStore';
@@ -22,7 +23,7 @@ import Products from './screens/posts/Products';
 import ProductDetail from './screens/components/ProductDetail';
 import AddProduct from './screens/components/AddProduct';
 
-import {UserContext, TypeContext, StoreContext, ProductContext, ListProductContext, filterTypeContext} from './UserContext';
+import {UserContext, TypeContext, StoreContext, ProductContext, ListProductContext, filterTypeContext, UserReqContext} from './UserContext';
 
 const Tab = createBottomTabNavigator();
 
@@ -131,6 +132,7 @@ function App() {
   const [product, setProduct] = useState({});
   const [listProduct, setListProduct] = useState([]);
   const [filterType, setFilterType] = useState('');
+  const [userReq, setUserReq] = useState({});
 
   return (
   <UserContext.Provider value={{user: user, 
@@ -159,6 +161,7 @@ function App() {
         <Stack.Screen name='login' component={Login} />
         <Stack.Screen name='entity' component={CreateEntity} />
         <Stack.Screen name='Checkout' component={CheckOut} />
+        <Stack.Screen name='Payment' component={Payment} />
         <Stack.Screen name='Order Details' component={OrderDetails} />
         <Stack.Screen name='Product Details' component={ProductDetail} />
         <Stack.Screen name='create store' component={CreateStore} />

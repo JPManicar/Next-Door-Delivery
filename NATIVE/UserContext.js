@@ -19,3 +19,7 @@ export const ListProductContext = React.createContext({listProduct: {},
 export const filterTypeContext = React.createContext({filterType: '',
                         setFilterType: ((value) => {})
                     });
+
+export const UserReqContext = React.createContext({userReq: '',
+                        setUserReq: ((value) => {})
+                    });

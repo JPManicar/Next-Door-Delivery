@@ -103,7 +103,7 @@ export default function Dashboard() {
         </ScrollView>
       </View>
     );  
-  } else {
+  } else if (types == 'Seller'){
       return ( 
       <View style={styles.container}>
         <ScrollView style={styles.scroll}>
@@ -132,8 +132,35 @@ export default function Dashboard() {
         </ScrollView>
       </View>
     );
+  } else {
+    return ( 
+      <View style={styles.container}>
+        <ScrollView style={styles.scroll}>
+          <View>
+            <SearchBar
+              style={styles.searchpane}
+              placeholder="Type Here to Search..." 
+              value={search}
+              onChangeText={text => setSearch(text)}
+              onKey = {(event) => searchIt(event)}
+              />
+             <TouchableOpacity style={styles.loginBtn}> 
+                <Text style={styles.buttonText} onPress={() => searchIt() }>Search</Text>
+              </TouchableOpacity>
+          </View>
+
+          <View>
+             <Text style={styles.logo}>USERS PENDING</Text>
+              {card}
+          </View>
+          <View>
+             <Text style={styles.logo}>USERS ACCEPTED</Text>
+              {card}
+          </View>
+        </ScrollView>
+      </View>
+    );
   }
-  
 }
 
 const styles = StyleSheet.create({
