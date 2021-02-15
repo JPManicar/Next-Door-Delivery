@@ -34,7 +34,7 @@ export default function Payment () {
 
   function getProductsList () {
     //TODO: ?prod_state= to payment
-    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=", {
+    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state= payment", {
       Accept: "application/json",
       "Content-Type": "application/json",
     })
@@ -54,7 +54,7 @@ export default function Payment () {
       const entity = {
         user: user.id,
         product: cartList[i].id,
-        prod_state: '<update this string to payment>'
+        prod_state: 'rider'
       }
       axios.put("associate/user/"+ user.id +"/products/details", entity)
         .then((response) => {
