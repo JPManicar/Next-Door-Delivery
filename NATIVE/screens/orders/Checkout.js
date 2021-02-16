@@ -32,9 +32,11 @@ export default function Checkout () {
     getProductsList();
   }, []);
 
+  
+
   function getProductsList () {
-    //TODO: ?prod_state= to checkout
-    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=", {
+    //TODO: ?prod_state= tocheckout
+    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=checkout", {
       Accept: "application/json",
       "Content-Type": "application/json",
     })
@@ -46,7 +48,9 @@ export default function Checkout () {
       .catch((error) => {
         console.error(error);
       });
+    
   }
+ 
   function paymentProduct () {
     //TODO: edit prod_state to payment
     var success = 0;
@@ -54,7 +58,7 @@ export default function Checkout () {
       const entity = {
         user: user.id,
         product: cartList[i].id,
-        prod_state: '<update this string to payment>'
+        prod_state: 'payment'
       }
       axios.put("associate/user/"+ user.id +"/products/details", entity)
         .then((response) => {
