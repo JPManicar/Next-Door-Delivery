@@ -35,6 +35,8 @@ export default function Checkout () {
     getProductsList();
   }, []);
 
+  
+
   function getProductsList () {
     fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=checkout", {
       Accept: "application/json",
@@ -48,7 +50,9 @@ export default function Checkout () {
       .catch((error) => {
         console.error(error);
       });
+    
   }
+ 
   function paymentProduct () {
     var success = 0;
     for (let i = 0; i < cartList.length; i++) {
