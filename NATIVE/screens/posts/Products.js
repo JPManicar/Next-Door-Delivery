@@ -29,11 +29,20 @@ export default function Products () {
   if (listProduct.length && filters.includes(filterType)) {
       console.log('filter', listProduct);
       const arr = listProduct.filter((item) =>  item.product_type.includes(filterType) )
-      for (let i = 0; i < arr.length; i++) {
-      card.push(
-          <ProductCard prop={arr[i]} />
-      );
-    }
+      if (arr.length) {
+        for (let i = 0; i < arr.length; i++) {
+          card.push(
+              <ProductCard prop={arr[i]} />
+          );
+        }
+      } else {
+        card.push(
+          <Image
+              source={require('../assets/no_results_found.png')}
+              style={styles.miniProfile}
+            />
+        );
+      }
   } else if (listProduct.length) {
     Keyboard.dismiss()
     for (let i = 0; i < listProduct.length; i++) {
@@ -42,6 +51,14 @@ export default function Products () {
           <ProductCard prop={listProduct[i]} />
         );
       }
+    }
+    if (!card.length) {
+      card.push(
+        <Image
+            source={require('../assets/no_results_found.png')}
+            style={styles.miniProfile}
+          />
+      );
     }
   }
 
@@ -68,6 +85,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  miniProfile: {
+    marginTop: 70,
+    alignItems: 'center',
+    width:400,
+    height: 250,
   },
   logo:{
     fontWeight:"bold",

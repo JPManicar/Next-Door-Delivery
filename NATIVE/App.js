@@ -80,7 +80,7 @@ function MainTabs() {
                     }} />
       </Tab.Navigator>
     );
-  } else if (types == 'Rider' || types == 'Seller') {
+  } else if (types == 'Rider') {
     return (
       <Tab.Navigator>
         <Tab.Screen name='Dashboard' 
@@ -119,6 +119,34 @@ function MainTabs() {
                     }} />
       </Tab.Navigator>
     );
+  } else if (types == 'Seller') {
+    return (
+    <Tab.Navigator>
+        <Tab.Screen name='Dashboard' 
+                    component={Dashboard}
+                    options={{
+                      tabBarIcon: () => (
+                        <Image
+                          source={require('./screens/assets/home.png')                  
+                          }
+                          style={styles.profile}/>
+                    ), 
+                    tabBarLabel: 'Dashboard'             
+                    }}
+           />
+        <Tab.Screen name='Profile' 
+                    component={Profile}
+                    options={{
+                      tabBarIcon: () => (
+                        <Image
+                          source={require('./screens/assets/user.png')                  
+                          }
+                          style={styles.profile}/>
+                    ), 
+                    tabBarLabel: 'Profile'             
+                    }} />
+      </Tab.Navigator>
+    );
   }
   
 }
@@ -132,7 +160,7 @@ function App() {
   const [product, setProduct] = useState({});
   const [listProduct, setListProduct] = useState([]);
   const [filterType, setFilterType] = useState('');
-  const [userReq, setUserReq] = useState({});
+  const [userReq, setUserReq] = useState([]);
 
   return (
   <UserContext.Provider value={{user: user, 
@@ -153,7 +181,9 @@ function App() {
   <filterTypeContext.Provider value={{filterType: filterType, 
                         setFilterType: ((value) => {setFilterType(value)})
                          }}>
-                         
+  <UserReqContext.Provider value={{userReq: userReq, 
+                        setUserReq: ((value) => {setUserReq(value)})
+                         }}>                       
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Welcome'>
         <Stack.Screen name='Welcome' component={Welcome} />
@@ -170,6 +200,7 @@ function App() {
         <Stack.Screen name='home' component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
+  </UserReqContext.Provider>
   </filterTypeContext.Provider>
   </ListProductContext.Provider>
   </ProductContext.Provider>

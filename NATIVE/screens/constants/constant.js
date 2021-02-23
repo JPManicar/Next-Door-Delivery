@@ -30,3 +30,5 @@ export const prod_types = [
     image: require('../assets/cookedGoods.png')
   },
 ];
+
+export const key = "AIzaSyC8eg-nYFDugb2HT7m9ayVbxiY-hmlwe3Q"

@@ -9,6 +9,7 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
@@ -21,7 +22,9 @@ export default function Cart() {
   const {types, setTypes} = useContext(TypeContext);
 
   const [cartList, setCartList] = useState([]);
-  var nav = useNavigation();
+  const [success, setSuccess] = useState(0);
+  const [isActive, setIsActive] = useState(true);
+  var navigation = useNavigation();
   var card = [];
 
   useEffect(() => {
@@ -34,49 +37,63 @@ export default function Cart() {
           <ProductCard prop={cartList[i]}/>
       );
     }
+  } else {
+    card.push(
+      <Image
+          source={require('./assets/no_items_found.jpg')}
+          style={styles.miniProfile}
+        />
+    );
   }
 
   function getProductsList () {
-    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=cart", {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        setCartList(json);
+    if (isActive) {
+      fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=cart", {
+        Accept: "application/json",
+        "Content-Type": "application/json",
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json);
+            setCartList(json); 
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+        setIsActive(false);
+    } else {
+      return;
+    }
   }
   function checkoutProduct () {
-    //TODO: add some functionality to update status to checkout
-    var success = 0;
     for (let i = 0; i < cartList.length; i++) {
       const entity = {
+        id: cartList[i].associates_id,
         user: user.id,
         product: cartList[i].id,
         prod_state: 'checkout'
       }
-      axios.put("associate/user/"+ user.id +"/products/details", entity)
+      axios.put("http://10.0.2.2:8000/api/associate/user/"+ cartList[i].associates_id +"/products/details", entity)
         .then((response) => {
           if (response.status == 200 || response.status == 201) {
-              success = 1;
               console.log(response);
+              if (i == cartList.length-1) {
+                Alert.alert(
+                  "Success",
+                  "Products moved to checkout",
+                  [{ text: "OK", onPress: () => navigation.navigate('Checkout') }],
+                );
+              }
           } else {
-              success = 0
-              console.log(response);
+            Alert.alert(
+              "Process Failed",
+              "Please check it out again",
+              [{ text: "OK"}],
+            );
           }
         });
     }
-    if (success) {
-      Alert.alert(
-        "Success",
-        "Products moved to checkout",
-        [{ text: "OK", onPress: () =>navigation.navigate('checkout') }],
-      );
-    }
+    
   }
 
   return(
@@ -95,6 +112,11 @@ export default function Cart() {
 const styles = StyleSheet.create({
   scroll: {
     width:"100%",
+  },
+  miniProfile: {
+    marginTop: 100,
+    width:370,
+    height: 300,
   },
   container: {
     flex: 1,

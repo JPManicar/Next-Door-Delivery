@@ -54,6 +54,12 @@ export default function Login () {
                 [{ text: "OK", onPress: () => getStore() }],
               );
           }
+        } else {
+          Alert.alert(
+            "Failed",
+            "Either your email or Password is incorrect.",
+            [{ text: "OK"}],
+          );        
         }
       })
       .catch((error) => {
@@ -79,8 +85,12 @@ export default function Login () {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Login</Text>
+      <Image
+        source={require('./assets/login.png')}
+        style={styles.miniProfile}
+      />
       <View style={styles.inputView} >
+          <Text style={styles.miniLogo}> Email: </Text>
             <TextInput  
               style={styles.inputText}
               placeholder="Email..." 
@@ -88,6 +98,7 @@ export default function Login () {
               onChangeText={text => setUsername(text)}/>
         </View>
         <View style={styles.inputView} >
+          <Text style={styles.miniLogo}> Password: </Text>
             <TextInput  
               secureTextEntry
               style={styles.inputText}
@@ -98,7 +109,7 @@ export default function Login () {
         <TouchableOpacity>
             <Text style={styles.forgot}>Forgot Password?</Text>
         </TouchableOpacity>
-        <Text> Sign up as a: </Text>
+        <Text style={styles.miniLogo}> Login as a: </Text>
         <TouchableOpacity style={styles.loginBtn}>
           <Text style={styles.loginText} onPress={() => login('User')}>Customer</Text>
         </TouchableOpacity>
@@ -119,6 +130,17 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    miniProfile: {
+      alignItems: 'center',
+      width:150,
+      height: 150,
+    },
+    miniLogo:{
+      fontSize:17,
+      color:"#808080",
+      marginBottom:10,
+      alignItems: 'center',
+    },
     logo:{
       fontWeight:"bold",
       fontSize:30,
@@ -127,16 +149,16 @@ const styles = StyleSheet.create({
     },
     inputView:{
       width:"80%",
-      height: 60
+      height: 95
     },
     inputText:{
       height:50,
       fontSize:18,
       color:"black",
       borderColor: 'black',
-      borderWidth: 1,
-      width:"80%",
-      borderRadius:25,
+      borderBottomWidth: 1,
+      width:"97%",
+      borderRadius:5,
       justifyContent:"center",
       padding:10
     },
@@ -148,7 +170,7 @@ const styles = StyleSheet.create({
       width:"80%",
       borderColor: "#ffdb58",
       backgroundColor:"#ffdb58",
-      borderRadius:25,
+      borderRadius:5,
       height:50,
       alignItems:"center",
       justifyContent:"center",

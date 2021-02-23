@@ -58,20 +58,32 @@ class UserProductListAPIView(generics.ListAPIView):
                 userproduct__prod_state=prod_state)
         
         return Product.objects.filter(userproduct__user=user)
-        
+
+    def get_serializer_context(self):
+        return {
+            'user': self.kwargs.get('pk'),
+        }
+
+class PendingUserListAPIView(generics.ListAPIView):
+    serializer_class = UserListSerializer
+
+    def get_queryset(self):
+        prod_state = self.request.query_params.get('prod_state', None)       
+        return Users.objects.filter(userproduct__prod_state=prod_state)
+
+    def get_serializer_context(self):
+        return {
+            'prod_state': self.kwargs.get('prod_state'),
+        }
 
 class UserProductUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserProduct.objects.all()
-    lookup_url_kwarg = 'pk'
-    lookup_field = 'product'
     serializer_class = UserProductSerializer
    
 
 class UserRiderAPIView(generics.CreateAPIView):
     serializer_class = UserRiderSerializer
-
-    def get_queryset(self):
-        return Users.objects.filter(userrider__rider=request.data.get("rider"))
+    model = UserRider
 
 
 class UserRiderListAPIView(generics.ListAPIView):
@@ -80,6 +92,31 @@ class UserRiderListAPIView(generics.ListAPIView):
     def get_queryset(self):
         pk = self.kwargs.get('pk')
         queryset = Rider.objects.filter(userrider__user=pk)
+
+        return queryset.distinct()
+
+    def get_serializer_context(self):
+        return {
+            'user': self.kwargs.get('pk'),
+        }
+
+
+class RiderUserListApiView(generics.ListAPIView):
+    serializer_class = UserListSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        queryset = Users.objects.filter(userrider__rider=pk,
+            userrider__rider_state='toShop')
+
+        return queryset.distinct()
+
+class ProductStoreListApiView(generics.ListAPIView):
+    serializer_class = ProductStoreListSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        queryset = Store.objects.filter(storeproduct__product=pk)
 
         return queryset.distinct()
 

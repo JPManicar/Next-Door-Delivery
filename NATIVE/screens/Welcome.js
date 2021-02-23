@@ -4,25 +4,36 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated,
+  Dimensions,
+  FlatList,
+  Modal,
+  ScrollView
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
 export default function Welcome () {
   const navigation = useNavigation();
+  var scrollX = new Animated.Value(0);
+  var illustrations = [require('./assets/welcome.png'),]
   
   return (
     <View style={styles.container}>
           <View style={styles.inputView} >
-            <Text style={styles.logo}>Welcome</Text>
+            <Image
+                  source={require('./assets/connect.jpg')}
+                  style={styles.miniProfile}
+                />
+            <Text style={styles.miniLogo}>Get your food by connecting with others</Text>
           </View>
            
-            <TouchableOpacity style={styles.loginBtn}>
-                <Text style={styles.loginText} onPress={() => navigation.navigate('signup')}>Sign Up</Text>
+            <TouchableOpacity style={styles.loginBtn}  onPress={() => navigation.navigate('signup')}>
+                <Text style={styles.loginText}>Sign Up</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginBtn}>
-                <Text style={styles.loginText} onPress={() => navigation.navigate('login')}>Log In</Text>
+            <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('login')}>
+                <Text style={styles.loginText}>Log In</Text>
             </TouchableOpacity>
           </View>
   );
@@ -34,6 +45,27 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    logoView: {
+    width:1,
+    height: 2,
+    alignItems: 'center',
+    marginTop: 5
+    },
+    miniLogo:{
+      fontSize:17,
+      color:"#808080",
+      marginBottom:10,
+      alignItems: 'center',
+    },
+    miniProfile: {
+      marginLeft: 75,
+      alignItems: 'center',
+      width:150,
+      height: 150,
+    },
+    profile: {
+      alignItems: 'center',
     },
     tinyLogo: {
       width: 250,

@@ -26,8 +26,8 @@ class Rider(models.Model):
     active_rider = models.BooleanField(default=True)
     Username = models.EmailField(max_length=30)
     Password = models.CharField(max_length=30)
-    longitude = models.FloatField(default=location.latlng[0])
-    latitude = models.FloatField(default=location.latlng[1])
+    longitude = models.FloatField(default=location.latlng[1])
+    latitude = models.FloatField(default=location.latlng[0])
 
     def ___str__(self):
         return self.preferred_name
@@ -37,10 +37,10 @@ class Rider(models.Model):
         return datetime.now()
 
     def get_longitude(self):
-        return self.location.latlng[0]
+        return self.location.latlng[1]
 
     def get_latitude(self):
-        return self.location.latlng[1]
+        return self.location.latlng[0]
 
 
 
