@@ -15,7 +15,6 @@ class StoreProductSerializer(serializers.ModelSerializer):
                  )
 
 class StoreProductListSerialiser(serializers.ModelSerializer):
-
     class Meta:
         model = Product
         fields = (
@@ -24,7 +23,21 @@ class StoreProductListSerialiser(serializers.ModelSerializer):
             'product_description', 
             'product_type',
             'quantity', 
-            'price',)
+            'price')
+
+
+class ProductStoreListSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Store
+        fields = ('id',
+                  'Name', 
+                  'longitude', 
+                  'latitude', 
+                  'details',
+                  'address',
+                  'opening_hours')
+
 
 class StoreSellerSerializer(serializers.ModelSerializer):
     
@@ -50,13 +63,14 @@ class UserProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProduct
-        fields = ('user',
+        fields = ('id',
+                  'user',
         		  'product',
                   'prod_state',
         		  )
 
 class UserProductListSerializer(serializers.ModelSerializer):
-    
+    associates_id = serializers.SerializerMethodField()
     class Meta:
         model = Product
         fields = (
@@ -66,7 +80,17 @@ class UserProductListSerializer(serializers.ModelSerializer):
             'product_type',
             'quantity', 
             'price',
+            'associates_id'
             )
+
+    def get_associates_id(self, obj): 
+
+        user = self.context.get('user')
+        item  = UserProduct.objects.filter(user=user,
+            product=obj.id).first()
+
+        if item:
+            return item.id
 
 
 class UserRiderSerializer(serializers.ModelSerializer):
@@ -79,27 +103,34 @@ class UserRiderSerializer(serializers.ModelSerializer):
         		  )
 
 class RiderListSerializer(serializers.ModelSerializer):
-    riderVehicle = serializers.SerializerMethodField()
+    associates_id_product = serializers.SerializerMethodField()
     class Meta:
         model = Rider
         fields = ('id',
                  'RiderNo',
+                 'preferred_name',
                  'FirstName',
                  'LastName',
                  'ContactNo',
                  'SecondaryContactNo',
-                 'riderVehicle',
-                 'plateNo',
                  'longitude',
-                 'latitude',)
+                 'latitude',
+                 'associates_id_product')
 
-    def get_riderVehicle(self, obj):
-        return RiderVehicle.objects.filter(RiderAccount=self.id)
+    def get_associates_id_product(self, obj): 
+        user = self.context.get('user')
+        item  = UserProduct.objects.filter(user=user,
+            prod_state='rider').first()
+
+        if item:
+            return item.product.id
 
 class UserListSerializer(serializers.ModelSerializer):
+    associates_id_product = serializers.SerializerMethodField()
     class Meta:
         model = Users
-        fields = (
+        fields = ('id',
+                 'preferred_name',
                  'FirstName',
                  'LastName',
                  'ContactNo',
@@ -109,7 +140,15 @@ class UserListSerializer(serializers.ModelSerializer):
                  'Province',
                  'Country',
                  'longitude',
-                 'latitude',)
+                 'latitude',
+                 'associates_id_product')
+
+    def get_associates_id_product(self, obj): 
+        item  = UserProduct.objects.filter(user=obj.id,
+            prod_state='rider').first()
+
+        if item:
+            return item.product.id
 
 class UserStoreSerializer(serializers.ModelSerializer):
     

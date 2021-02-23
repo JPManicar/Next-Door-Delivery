@@ -23,8 +23,8 @@ class Users(models.Model):
     active_buyer = models.BooleanField(max_length=15)
     Username = models.EmailField(max_length=30)
     Password = models.CharField(max_length=30)
-    longitude = models.FloatField(default=location.latlng[0])
-    latitude = models.FloatField(default=location.latlng[1])
+    longitude = models.FloatField(default=location.latlng[1])
+    latitude = models.FloatField(default=location.latlng[0])
 
 
     @property
@@ -35,7 +35,7 @@ class Users(models.Model):
         return self.preferred_name
 
     def get_longitude(self):
-        return self.location.latlng[0]
+        return self.location.latlng[1]
 
     def get_latitude(self):
-        return self.location.latlng[1]
+        return self.location.latlng[0]

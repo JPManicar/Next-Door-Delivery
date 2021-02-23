@@ -16,8 +16,9 @@ import axios from "axios";
 import Categories from './posts/Categories';
 import StoreDetail from './components/StoreDetail';
 import ProductCard from './components/ProductCard';
+import UserCard from './components/UserCard';
 
-import {UserContext, TypeContext, StoreContext, ListProductContext, filterTypeContext} from '../UserContext';
+import {UserContext, TypeContext, StoreContext, ListProductContext, UserReqContext, filterTypeContext} from '../UserContext';
 import ProductAdder from './components/ProductAdder';
 
 export default function Dashboard() { 
@@ -25,6 +26,7 @@ export default function Dashboard() {
   const {types, setTypes} = useContext(TypeContext);
   const {store, setStore} = useContext(StoreContext);
   const {listProduct, setListProduct} = useContext(ListProductContext);
+  const {userReq, setUserReq} = useContext(UserReqContext);
   const {filterType, setFilterType} = useContext(filterTypeContext);
 
   const [search, setSearch] = useState("");
@@ -34,12 +36,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     getProductsList();
+    if (types == 'Rider') {
+      getRiderAccepted();
+    }
   }, []);
 
   function getProductsList() {
     const url = {'User': "http://10.0.2.2:8000/api/product/create",
                 'Seller': "http://10.0.2.2:8000/api/associate/store/"+ storeId +"/products",
-                'Rider': "http://10.0.2.2:8000/api/associate/rider/"+ user.id +"/user"}
+                'Rider': "http://10.0.2.2:8000/api/associate/user/pending/products?prod_state=rider"}
     return fetch(url[types], {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -48,6 +53,21 @@ export default function Dashboard() {
       .then((json) => {
         setProduct(json);
         setListProduct(json);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function getRiderAccepted() {
+    return fetch("http://10.0.2.2:8000/api/associate/rider/"+ user.id +"/user", {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setUserReq(json);
+        console.log("ACCEPTED: ", json);
       })
       .catch((error) => {
         console.error(error);
@@ -64,12 +84,25 @@ export default function Dashboard() {
   }
 
   var card = [];
-  if (product.length) {
+  var accept = [];
+  if (product.length && !types.includes('Rider')) {
     for (let i = 0; i < product.length; i++) {
       card.push(
           <ProductCard prop={product[i]} onPress={() => orderNow()} />
       );
-      console.log(product[i]);
+    }
+  } else if (product.length && types.includes('Rider')) {
+    for (let i = 0; i < product.length; i++) {
+      if (accept.filter(obj => obj.id == product[i].id).length > 0) {
+        card.push(
+          <UserCard prop={{product: product[i], type: 'pending'}} />
+        );
+      }
+    }
+    for (let j = 0; j < userReq.length; j++) {
+      accept.push(
+          <UserCard prop={{product: userReq[j], type: 'accepted'}} />
+      );
     }
   }
 
@@ -137,25 +170,12 @@ export default function Dashboard() {
       <View style={styles.container}>
         <ScrollView style={styles.scroll}>
           <View>
-            <SearchBar
-              style={styles.searchpane}
-              placeholder="Type Here to Search..." 
-              value={search}
-              onChangeText={text => setSearch(text)}
-              onKey = {(event) => searchIt(event)}
-              />
-             <TouchableOpacity style={styles.loginBtn}> 
-                <Text style={styles.buttonText} onPress={() => searchIt() }>Search</Text>
-              </TouchableOpacity>
-          </View>
-
-          <View>
              <Text style={styles.logo}>USERS PENDING</Text>
               {card}
           </View>
           <View>
              <Text style={styles.logo}>USERS ACCEPTED</Text>
-              {card}
+              {accept}
           </View>
         </ScrollView>
       </View>

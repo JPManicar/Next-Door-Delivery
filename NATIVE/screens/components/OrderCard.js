@@ -45,7 +45,15 @@ const styles = StyleSheet.create({
     flex: 1,
     margin:0,
     marginBottom: 10,
-    marginLeft: 10
+    marginLeft: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
   profile: {
     alignItems: 'center',

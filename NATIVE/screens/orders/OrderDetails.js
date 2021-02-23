@@ -1,4 +1,4 @@
-import React, {useState, createRef}  from 'react';
+import React, {useState, useEffect, useContext}  from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -9,26 +9,52 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import OrderCard from '../components/OrderCard'
 import axios from "axios";
 
-export default function OrderDetails () {
-  const [address, setAddress] = useState("");
-  const [City, setCity] = useState("");
-  const [Province, setProvince] = useState("");
-  const [Country, setCountry] = useState("");
-  const [ContactNo, setContactNo] = useState("");
-  const navigation = useNavigation();
+import { UserContext, TypeContext } from '../../UserContext';
+import OrderCard from '../components/OrderCard'
 
+export default function OrderDetails () {
+  const {user,setUser} = useContext(UserContext);
+  const [address, setAddress] = useState(user.address);
+  const [City, setCity] = useState(user.City);
+  const [Province, setProvince] = useState(user.Province);
+  const [Country, setCountry] = useState(user.Country);
+  const [ContactNo, setContactNo] = useState(user.ContactNo);
+  const navigation = useNavigation();
+  var total = 0;
   var card = [];
-  if (card.length) {
-      for (let i = 0; i < 5; i++) {
+
+  const [cartList, setCartList] = useState([]);
+  if (cartList.length) {
+      for (let i = 0; i < cartList.length; i++) {
       card.push(
-          <OrderCard />
+          <OrderCard prop={cartList[i]}/>
       );
+      total += cartList[i].price;
     }
+  }
+
+  useEffect(() => {
+    getProductsList();
+  }, []);
+
+  function getProductsList () {
+    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=rider", {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        setCartList(json);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   function orderNow () {
@@ -37,12 +63,14 @@ export default function OrderDetails () {
 
   return(
     <View style={styles.container}>
+      <ScrollView style={styles.scroll}>
       <Text style={styles.logo}>ORDER DETAILS</Text>
          <View style={styles.detailsView}>
           <View style={styles.inputAddressView}>
                 <Text style={styles.labelAdress}>Address: </Text>
               <TextInput style={styles.inputAddressText}
-              onChangeText={(text) => setAddress( text.target.value)}
+              onChangeText={(text) => setAddress( text)}
+              value={address}
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Enter Address"
               placeholderTextColor="#003f5c"
@@ -54,7 +82,8 @@ export default function OrderDetails () {
           <View style={styles.inputView}>
               <Text style={styles.labelInput}>City: </Text>
               <TextInput style={styles.inputText}
-              onChangeText={(text) => setCity(text.target.value)}
+              value={City}
+              onChangeText={(text) => setCity(text)}
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Enter City"
               placeholderTextColor = "#002f6c"
@@ -64,7 +93,8 @@ export default function OrderDetails () {
           <View style={styles.inputView}>
               <Text style={styles.labelInput}>Province: </Text>
               <TextInput style={styles.inputText}
-              onChangeText={(text) => setProvince(text.target.value)}
+              value={Province}
+              onChangeText={(text) => setProvince(text)}
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Enter Province"
               placeholderTextColor = "#002f6c"
@@ -75,7 +105,8 @@ export default function OrderDetails () {
           <View style={styles.inputView}>
               <Text style={styles.labelInput}>Contact No: </Text>
               <TextInput style={styles.inputText}
-              onChangeText={(text) => setContactNo(text.target.value)}
+              value={ContactNo}
+              onChangeText={(text) => setContactNo(text)}
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Enter Contact No"
               placeholderTextColor = "#002f6c"
@@ -83,19 +114,21 @@ export default function OrderDetails () {
               />
           </View>
         </View>
-      <ScrollView style={styles.scroll}>
         {card}
-      </ScrollView>
+      <Text style={styles.logo}>Total: </Text>
+      <Text>{total}</Text>
+      <Text style={styles.logo}>Payment Mode: Cash on delivery</Text>
       <TouchableOpacity style={styles.loginBtn}>
         <Text style={styles.loginText} onPress={()=> orderNow()}>Track Order</Text>
       </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   scroll: {
-    width:"100%",
+    width:400,
   },
   container: {
     flex: 1,
@@ -108,26 +141,22 @@ const styles = StyleSheet.create({
     marginBottom:10,
     marginLeft: 10
   },
-  detailsView: {
-    width:"97%",
-    height:330,
-  },
   inputView:{
-    width:"97%",
+    width:380,
     flexDirection:'row',
     alignItems: 'center',
     flex: 1,
     margin:0,
-    marginBottom: 5,
+    marginBottom: 10,
     marginLeft: 10
   },
   inputAddressView:{
-    width:"97%",
+    width:380,
     height: 140,
     flexDirection:'row',
     alignItems: 'center',
     flex: 1,
-    margin:30,
+    margin:0,
     marginBottom: 10,
     marginLeft: 10
   },
@@ -143,7 +172,7 @@ const styles = StyleSheet.create({
     margin:0,
     marginBottom:10,
     padding: 5,
-    width: "30%"
+    width: 120
   },
   inputAddressText:{
     height:130,
@@ -154,14 +183,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderRightWidth: 1,
     borderTopWidth: 1,
-    width:"65%",
+    width:250,
     justifyContent:"center",
     margin:0,
     marginBottom:10,
-    padding: 10
+    padding: 10,
   },
   labelInput: {
-    height: 30,
+    height: 45,
     fontSize:13,
     color:"black",
     borderColor: '#a6a6a6',
@@ -170,12 +199,12 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderTopWidth: 1,
     margin:0,
-    marginBottom:5,
+    marginBottom:10,
     padding: 5,
-    width: "30%"
+    width: 120
     },
   inputText:{
-    height: 30,
+    height: 45,
     fontSize:15,
     color:"black",
     borderColor: '#a6a6a6',
@@ -183,14 +212,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderRightWidth: 1,
     borderTopWidth: 1,
-    width:"65s%",
+    width:250,
     justifyContent:"center",
     margin:0,
-    marginBottom:5,
-    padding: 10
+    marginBottom:10,
+    padding: 10,
   },
   loginBtn:{
-    width:"100%",
+    width:400,
     borderColor: "#ffdb58",
     backgroundColor:"#ffdb58",
     borderRadius:3,

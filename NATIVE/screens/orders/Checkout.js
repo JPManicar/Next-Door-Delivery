@@ -1,4 +1,4 @@
-import React, {useState, createRef}  from 'react';
+import React, {useState, useEffect, useContext}  from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -9,15 +9,18 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 
-import { UserContext } from '../../UserContext';
+import { UserContext, TypeContext } from '../../UserContext';
+import ProductCard from '../components/ProductCard';
 
 export default function Checkout () {
   const {user,setUser} = useContext(UserContext);
-  const nav = useNavigation();
+  const navigation = useNavigation();
+  var card = [];
 
   const [cartList, setCartList] = useState([]);
   if (cartList.length) {
@@ -33,8 +36,7 @@ export default function Checkout () {
   }, []);
 
   function getProductsList () {
-    //TODO: ?prod_state= to checkout
-    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=", {
+    fetch("http://10.0.2.2:8000/api/associate/user/"+ user.id +"/products?prod_state=checkout", {
       Accept: "application/json",
       "Content-Type": "application/json",
     })
@@ -48,36 +50,32 @@ export default function Checkout () {
       });
   }
   function paymentProduct () {
-    //TODO: edit prod_state to payment
     var success = 0;
     for (let i = 0; i < cartList.length; i++) {
       const entity = {
+        id: cartList[i].associates_id,
         user: user.id,
         product: cartList[i].id,
-        prod_state: '<update this string to payment>'
+        prod_state: 'payment'
       }
-      axios.put("associate/user/"+ user.id +"/products/details", entity)
+      axios.put("http://10.0.2.2:8000/api/associate/user/"+ cartList[i].associates_id +"/products/details", entity)
         .then((response) => {
           if (response.status == 200 || response.status == 201) {
-              success = 1;
+            console.log(response);
+            if (i == cartList.length-1) {
+              Alert.alert(
+                "Success",
+                "Products moved to payment",
+                [{ text: "OK", onPress: () => navigation.navigate('Payment') }],
+              );
+            }
           } else {
-              success = 0
               console.log(response);
           }
         });
     }
-    if (success) {
-      Alert.alert(
-        "Success",
-        "Products moved to checkout",
-        [{ text: "OK", onPress: () =>navigation.navigate('Payment') }],
-      );
-    }
   }
   
-  function orderNow () {
-    nav.navigate('Order Details');
-  }
   return(
     <View style={styles.container}>
       <Text style={styles.logo}>ITEMS IN CHECKOUT</Text>
@@ -85,7 +83,7 @@ export default function Checkout () {
         {card}
       </ScrollView>
       <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText} onPress={() => orderNow()}>payment</Text>
+        <Text style={styles.loginText} onPress={() => paymentProduct()}>proceed to payment</Text>
       </TouchableOpacity>
     </View>
   );

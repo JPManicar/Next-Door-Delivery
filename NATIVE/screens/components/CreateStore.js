@@ -39,12 +39,6 @@ export default function CreateStore({prop}) {
         axios.post("http://10.0.2.2:8000/api/store/create", entity)
       .then((response) => {
         if(response.status == 200 || response.status == 201) {
-
-        Alert.alert(
-              "Success",
-              "Store saved",
-              [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-            );
           console.log(response);
           saveRelation(response.data);
         }
@@ -69,9 +63,14 @@ export default function CreateStore({prop}) {
         console.log(user, store);
         axios.post("http://10.0.2.2:8000/api/associate/seller/store", relation)
             .then((response) => {
-                console.log(response);
+                console.log(response, relation);
                 setStore(store);
-                navigation.navigate('home', { screen: 'Dashboard'});
+                Alert.alert(
+                "Success",
+                "Store saved",
+                [{ text: "OK", onPress: () => navigation.navigate('home', { screen: 'Dashboard'}) }],
+              );
+              
              });
     }
   

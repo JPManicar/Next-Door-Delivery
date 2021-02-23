@@ -10,8 +10,8 @@ class Store(models.Model):
     location = loc if loc.latlng is None else [14.6193, 121.0537]
     StoreNo = models.CharField(max_length=15)
     Name = models.CharField(max_length=30)
-    longitude = models.FloatField(default=location[0])
-    latitude = models.FloatField(default=location[1])
+    longitude = models.FloatField(default=location[1])
+    latitude = models.FloatField(default=location[0])
     details = models.TextField(max_length=2000, default="")
     address = models.TextField(max_length=2000, default="")
     opening_hours = models.CharField(max_length=30, default="")
@@ -20,10 +20,10 @@ class Store(models.Model):
         return self.Name
 
     def get_longitude(self):
-        return self.location.latlng[0]
+        return self.location.latlng[1]
 
     def get_latitude(self):
-        return self.location.latlng[1]
+        return self.location.latlng[0]
 
 class StoreFeedback(models.Model):
     
