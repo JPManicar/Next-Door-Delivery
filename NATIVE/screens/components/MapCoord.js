@@ -136,7 +136,69 @@ export default function MapCoord ({props}) {
     "longitude": 120.98234,
   },
 ]);
-  const [endPolyline, setEndPolyline] = useState([]);
+  const [endPolyline, setEndPolyline] = (types == 'User') ? useState([
+  {
+    "latitude": 14.65223,
+    "longitude": 120.98234,
+  },
+  {
+    "latitude": 14.65162,
+    "longitude": 120.98233,
+  },
+  {
+    "latitude": 14.65157,
+    "longitude": 120.98376,
+  },
+  {
+    "latitude": 14.64983,
+    "longitude": 120.98372,
+  },
+  {
+    "latitude": 14.64736,
+    "longitude": 120.98364,
+  },
+  {
+    "latitude": 14.64742,
+    "longitude": 120.98188,
+  },
+  {
+    "latitude": 14.64748,
+    "longitude": 120.98038,
+  },
+  {
+    "latitude": 14.6475,
+    "longitude": 120.98004,
+  },
+  {
+    "latitude": 14.64741,
+    "longitude": 120.98004,
+  },
+]) : useState([
+  {
+    "latitude": 14.65154,
+    "longitude": 120.9853,
+  },
+  {
+    "latitude": 14.65157,
+    "longitude": 120.98459,
+  },
+  {
+    "latitude": 14.65156,
+    "longitude": 120.98391,
+  },
+  {
+    "latitude": 14.65157,
+    "longitude": 120.98376,
+  },
+  {
+    "latitude": 14.65162,
+    "longitude": 120.98233,
+  },
+  {
+    "latitude": 14.65223,
+    "longitude": 120.98234,
+  },
+]);
 
   useEffect(() => {
     getStartPolyline();
@@ -156,7 +218,7 @@ export default function MapCoord ({props}) {
       .then((json) => {
         if (json.status != 'NOT_FOUND') {
           console.log('pass: ',json.routes[0]);
-          setStartPolyline(decode(json.routes[0].overview_polyline.points.split(' ')[0]));
+          setStartPolyline(decode(json.routes[0].overview_polyline.points));
         }
       })
       .catch((error) => {
@@ -174,8 +236,8 @@ export default function MapCoord ({props}) {
       .then((response) => response.json())
       .then((json) => {
         if (json.status != 'NOT_FOUND') {
-          console.log('pass: ',json.routes[0].overview_polyline.points.split(' ')[0]);
-          setEndPolyline(decode(json.routes[0].overview_polyline.points.split(' ')[0]));
+          console.log('pass: ',decode(json.routes[0].overview_polyline.points));
+          setEndPolyline(decode(json.routes[0].overview_polyline.points));
         }
       })
       .catch((error) => {
@@ -225,12 +287,19 @@ export default function MapCoord ({props}) {
           strokeColor="#ffdb58"
           strokeWidth={6}
         />
+
+        <Polyline
+          coordinates={endPolyline}
+          strokeColor="#808000"
+          strokeWidth={6}
+        />
+
         <Marker
           key={1}
           coordinate={{ latitude : props.user.latitude , longitude : props.user.longitude }}
           title={props.user.preferred_name}
           description={types}
-          pinColor={"aqua"}
+          pinColor={"green"}
          />
 
          <Marker
