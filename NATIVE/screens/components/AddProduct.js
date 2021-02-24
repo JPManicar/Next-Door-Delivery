@@ -65,7 +65,7 @@ export default function AddProduct() {
     axios.post("http://10.0.2.2:8000/api/associate/store/products", relation)
       .then((response) => {
           console.log(response);
-          setListProduct(listProduct.concat(product));
+          setListProduct(listProduct.push(product));
           navigation.navigate('home', { screen: 'Dashboard'});
        });
   }

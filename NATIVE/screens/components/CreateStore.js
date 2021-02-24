@@ -41,9 +41,7 @@ export default function CreateStore({prop}) {
         if(response.status == 200 || response.status == 201) {
           console.log(response);
           saveRelation(response.data);
-        }
-        
-        else {
+        } else {
           console.log(response);
           Alert.alert(
               "Failed",
